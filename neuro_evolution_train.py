@@ -15,3 +15,6 @@ if __name__ == "__main__":
     print("Initializing MineRL Environment")
 
     pop = Population(DiamondAgent, **POPULATION_KWARGS)
+
+    pop.train(gen=5)
+

@@ -11,3 +11,8 @@ class Population:
         print(type(agent))
         print(agent())
 
+    def train(self, gen):
+        for generation in range(gen):
+            print(generation)
+
+        return self
