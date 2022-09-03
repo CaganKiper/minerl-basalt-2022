@@ -1,13 +1,15 @@
+import abc
+
 from lib.nepy.agent import Agent
 
 
 class MineRLAgent(Agent):
 
-    @Agent.abstractmethod
+    @abc.abstractmethod
     def _env_obs_to_agent(self, minerl_obs):
         ...
 
-    @Agent.abstractmethod
+    @abc.abstractmethod
     def _agent_action_to_env(self, agent_action):
         ...
 
@@ -29,3 +31,4 @@ class DiamondAgent(MineRLAgent):
 
     def _agent_action_to_env(self, agent_action):
         pass
+
