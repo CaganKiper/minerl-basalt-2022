@@ -24,7 +24,7 @@ class MineRLAgent(Agent):
         return minerl_action
 
     def fitness(self):
-        raise NotImplementedError
+        return 0
 
 
 class DiamondAgent(MineRLAgent):

@@ -5,6 +5,7 @@ def selection(population, *, selection_size=2):
     """
     TODO:
         args:
+            population: Population object
             selection_size: number of agents to be selected (default=2)
         kwargs:
             TBD
@@ -22,10 +23,10 @@ def cross_over(agent_list):
             TBD
         return: returns a new Agent derived from each agent from agent_list
     """
-    return Agent()
+    return agent_list
 
 
-def mutate(agent, *, mutation_rate=0.02):
+def mutation(agent, *, mutation_rate=0.02):
     """
     TODO:
         args:

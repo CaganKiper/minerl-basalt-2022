@@ -12,9 +12,9 @@ AGENT_KWARGS = dict(
 )
 
 if __name__ == "__main__":
-    print("Initializing MineRL Environment")
 
+    print("Initializing Population")
     pop = Population(DiamondAgent, **POPULATION_KWARGS)
 
-    pop.train(gen=5)
-
+    print("Training Population")
+    pop.fit(generations=5)
