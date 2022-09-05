@@ -17,4 +17,4 @@ if __name__ == "__main__":
     pop = Population(DiamondAgent, **POPULATION_KWARGS)
 
     print("Training Population")
-    pop.fit(generations=5)
+    pop.fit()

@@ -14,7 +14,7 @@ class MineRLAgent(Agent):
         pass
 
     def _act(self, agent_input):
-        agent_action = agent_input
+        agent_action = self.phenotype.foward(agent_input)
         return agent_action
 
     def get_action(self, minerl_obs):
@@ -24,6 +24,9 @@ class MineRLAgent(Agent):
         return minerl_action
 
     def fitness(self):
+        """
+            TODO: create an environment and run trough it
+        """
         return 0
 
 
