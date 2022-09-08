@@ -1,5 +1,5 @@
 import abc
-
+import minerl
 import gym
 
 from lib.nepy.agent import Agent
@@ -9,6 +9,7 @@ class MineRLAgent(Agent):
 
     def __init__(self):
         self.environment_name = "MineRLObtainDiamondShovel-v0"
+        super(MineRLAgent, self).__init__()
 
     @abc.abstractmethod
     def _env_obs_to_agent(self, minerl_obs):
@@ -48,6 +49,9 @@ class MineRLAgent(Agent):
 
 
 class DiamondAgent(MineRLAgent):
+    
+    def __init__(self):
+        super(DiamondAgent, self).__init__()
 
     def _env_obs_to_agent(self, minerl_obs):
         """
