@@ -1,9 +1,14 @@
 import abc
 
+import gym
+
 from lib.nepy.agent import Agent
 
 
 class MineRLAgent(Agent):
+
+    def __init__(self):
+        self.environment_name = "MineRLObtainDiamondShovel-v0"
 
     @abc.abstractmethod
     def _env_obs_to_agent(self, minerl_obs):
@@ -25,9 +30,21 @@ class MineRLAgent(Agent):
 
     def fitness(self):
         """
-            TODO: create an environment and run trough it
+            Get Fitness
         """
-        return 0
+        env = gym.make(self.environment_name)
+        obs = env.reset()
+
+        total_reward = 0
+        done = False
+        while not done:
+            action = self.get_action(obs)
+            obs, reward, done, _ = env.step(action)
+            total_reward += reward
+
+            env.render()
+
+        return total_reward
 
 
 class DiamondAgent(MineRLAgent):
