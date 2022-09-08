@@ -13,3 +13,6 @@ class Agent(abc.ABC):
     @abc.abstractmethod
     def fitness(self):
         pass
+
+    def predict(self, agent_input):
+        return self.phenotype.foward(agent_input)
