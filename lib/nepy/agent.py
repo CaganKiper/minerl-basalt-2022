@@ -15,4 +15,4 @@ class Agent(abc.ABC):
         pass
 
     def predict(self, agent_input):
-        return self.phenotype.foward(agent_input)
+        return self.phenotype.forward(agent_input)

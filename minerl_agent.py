@@ -2,7 +2,6 @@ import abc
 import minerl
 import gym
 
-
 from lib.nepy.agent import Agent
 
 
@@ -21,7 +20,7 @@ class MineRLAgent(Agent):
         pass
 
     def _act(self, agent_input):
-        agent_action = self.phenotype.foward(agent_input)
+        agent_action = self.predict(agent_input)
         return agent_action
 
     def get_action(self, minerl_obs):
@@ -46,6 +45,7 @@ class MineRLAgent(Agent):
 
             env.render()
 
+        env.close()
         return total_reward
 
 
