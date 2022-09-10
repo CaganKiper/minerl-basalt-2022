@@ -9,7 +9,7 @@ class Population:
         self.population_size = population_size
         self.generation = 1
 
-        self._agent_list = [agent_class() for i in range(self.population_size)]
+        self._agent_list = [agent_class() for _ in range(self.population_size)]
 
     def __iter__(self):
         for agent in self._agent_list:

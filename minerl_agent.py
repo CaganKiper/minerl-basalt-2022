@@ -8,7 +8,6 @@ from lib.nepy.agent import Agent
 class MineRLAgent(Agent):
 
     def __init__(self):
-        self.environment_name = "MineRLObtainDiamondShovel-v0"
         super(MineRLAgent, self).__init__()
 
     @abc.abstractmethod
@@ -52,17 +51,49 @@ class MineRLAgent(Agent):
 class DiamondAgent(MineRLAgent):
 
     def __init__(self):
+        self.environment_name = "MineRLObtainDiamondShovel-v0"
         super(DiamondAgent, self).__init__()
 
     def _env_obs_to_agent(self, minerl_obs):
         """
             TODO: Implement it
+            {
+                pov: [...],
+                inventory:{
+                    oak_wood: 3,
+                    ...
+                }
+            }
+
+            @:param minerl_obs:
+            :returns:
+            [
+                0.5,
+                1,
+                45,
+                4,
+                -3,
+                ...
+
+            ]
         """
         pass
 
     def _agent_action_to_env(self, agent_action):
         """
             TODO: Implement it
+            [
+                0.32, #corresponds to attack
+                0.99,
+                0.51,
+                ...
+            ]
+
+            :returns:
+            {
+                attack: 0 #<0.5 = 0
+                left: 1 #>0.5 = 1
+                right: 1 #>0.5 = 1
+            }
         """
         pass
-

@@ -9,6 +9,17 @@ AGENT_KWARGS = dict(
 
 )
 
+TARGET_OBSERVATION_SPACE = dict(
+    pov = [360, 640],
+    inventory = {
+        "oak_wood"
+    }
+)
+
+TARGET_ACTION_SPACE = dict(
+
+)
+
 if __name__ == "__main__":
     print("Initializing Population")
     pop = Population(DiamondAgent, **POPULATION_KWARGS)
