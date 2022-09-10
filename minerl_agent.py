@@ -74,7 +74,6 @@ class DiamondAgent(MineRLAgent):
                 4,
                 -3,
                 ...
-
             ]
         """
         pass
