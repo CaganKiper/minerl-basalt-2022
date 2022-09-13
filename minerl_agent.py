@@ -52,11 +52,27 @@ class DiamondAgent(MineRLAgent):
 
     def __init__(self):
         self.environment_name = "MineRLObtainDiamondShovel-v0"
+        self.target_observation_space = None
+        self.target_action_space = None
+
         super(DiamondAgent, self).__init__()
 
     def _env_obs_to_agent(self, minerl_obs):
         """
             TODO: Implement it
+            ---------------------------------------------
+            TARGET_OBSERVATION_SPACE = {
+                "pov": ...,
+                "inventory": {
+                    "oak_wood": 4,
+                    "oak_plank": 32
+                }
+            }
+
+            [..., 4, 32]
+
+            ---------------------------------------------
+
             {
                 pov: [...],
                 inventory:{
@@ -81,6 +97,17 @@ class DiamondAgent(MineRLAgent):
     def _agent_action_to_env(self, agent_action):
         """
             TODO: Implement it
+            ----------------------------------------------
+            [0.01, 0.99, ........ 0.44, 0.55, 0.67]
+
+            {
+                "camera": (-179, 179),
+                "foward": 0,
+                "back": 1,
+                "left": 1
+            }
+
+            ----------------------------------------------
             [
                 0.32, #corresponds to attack
                 0.99,
