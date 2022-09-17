@@ -1,3 +1,8 @@
+import random
+
+from lib.nepy.genotype import Genotype
+from lib.nepy.network.connection import Connection
+from lib.nepy.network.node import Node
 from lib.nepy.agent import Agent
 
 
@@ -26,6 +31,40 @@ def cross_over(agent_list):
     return agent_list
 
 
+def _cross_over_genome(genotype_1, genotype_2):
+    temp = []
+    for connection in genotype_1:
+        inv = connection.innovation_number
+        if genotype_2[inv] is not None:
+            # random choice
+            temp.append(random.choice([connection, genotype_2[inv]]))
+        else:
+            temp.append(connection)
+
+    return Genotype(temp)
+
+
+def __cross_over_genome_same_fitness(genotype_1, genotype_2):
+    # TODO: Performance check
+
+    temp = {}
+    for connection in genotype_1:
+        inv = connection.innovation_number
+
+        if genotype_2[inv] is not None:
+            random.choice([connection, genotype_2[connection.innovation_number]])
+        else:
+            temp[inv] = connection
+
+    for connection in genotype_2:
+        inv = connection.innovation_number
+
+        if not (inv in temp.keys()):
+            temp[inv] = connection
+
+    return Genotype(temp.values())
+
+
 def mutation(agent, *, mutation_rate=0.02):
     """
     TODO:
@@ -36,3 +75,42 @@ def mutation(agent, *, mutation_rate=0.02):
         return: returns the mutated input agent
     """
     return agent
+
+
+if __name__ == "__main__":
+    n1 = Node("1", "Input")
+    n2 = Node("2", "Input")
+    n3 = Node("3", "Input")
+    n4 = Node("4", "Output")
+
+    n5 = Node("5")
+    n6 = Node("6")
+
+    g1_connection_genes = [
+        Connection(n1, n4, innovation_number = 1),
+        Connection(n2, n4, enable = False, innovation_number = 2),
+        Connection(n3, n4, innovation_number = 3),
+        Connection(n2, n5, innovation_number = 4),
+        Connection(n5, n4, innovation_number = 5),
+        Connection(n1, n5, innovation_number = 8),
+    ]
+
+    g2_connection_genes = [
+        Connection(n1, n4, innovation_number = 1),
+        Connection(n2, n4, enable = False, innovation_number = 2),
+        Connection(n3, n4, innovation_number = 3),
+        Connection(n2, n5, innovation_number = 4),
+        Connection(n5, n4, enable = False, innovation_number = 5),
+        Connection(n5, n6, innovation_number = 6),
+        Connection(n6, n4, innovation_number = 7),
+        Connection(n3, n5, innovation_number = 9),
+        Connection(n1, n6, innovation_number = 10)
+    ]
+
+    g1 = Genotype(g1_connection_genes)
+    g2 = Genotype(g2_connection_genes)
+
+    g3 = _cross_over_genome(g1, g2)
+
+    print(g3)
+
