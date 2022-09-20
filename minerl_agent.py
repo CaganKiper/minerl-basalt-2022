@@ -54,45 +54,30 @@ class DiamondAgent(MineRLAgent):
         self.environment_name = "MineRLObtainDiamondShovel-v0"
         self.target_observation_space = None
         self.target_action_space = None
+        self.selected_inventory_items = ["diamond", "oak_log", "oak_planks", "oak_wood", "dark_oak_log",
+                                         "dark_oak_planks", "dark_oak_wood", "wooden_axe", "wooden_pickaxe",
+                                         "stone_axe", "stone_pickaxe", "stick", "cobblestone"]
 
         super(DiamondAgent, self).__init__()
 
+    def _filter_inventory_items(self, minerl_obs):
+        return list(set(list(minerl_obs["inventory"].keys())).intersection(self.selected_inventory_items))
+
+    def _process_pov(self, minerl_obs):
+        return minerl_obs["pov"]
+
+    def _process_inventory(self, minerl_obs):
+        filtered_items = self._filter_inventory_items(minerl_obs)
+        print(dict(
+            zip(
+                filtered_items,
+                [minerl_obs["inventory"][value] for value in filtered_items]
+            ))
+        )
+        return list(minerl_obs["inventory"].values())
+
     def _env_obs_to_agent(self, minerl_obs):
-        """
-            TODO: Implement it
-            ---------------------------------------------
-            TARGET_OBSERVATION_SPACE = {
-                "pov": ...,
-                "inventory": {
-                    "oak_wood": 4,
-                    "oak_plank": 32
-                }
-            }
-
-            [..., 4, 32]
-
-            ---------------------------------------------
-
-            {
-                pov: [...],
-                inventory:{
-                    oak_wood: 3,
-                    ...
-                }
-            }
-
-            @:param minerl_obs:
-            :returns:
-            [
-                0.5,
-                1,
-                45,
-                4,
-                -3,
-                ...
-            ]
-        """
-        pass
+        return [self._process_pov(minerl_obs), self._process_inventory(minerl_obs)]
 
     def _agent_action_to_env(self, agent_action):
         """
