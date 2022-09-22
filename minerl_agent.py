@@ -79,32 +79,11 @@ class DiamondAgent(MineRLAgent):
     def _env_obs_to_agent(self, minerl_obs):
         return [self._process_pov(minerl_obs), self._process_inventory(minerl_obs)]
 
+    def _process_camera(self, values):
+        return tuple(map(lambda x: round(x), (-180 + (180 - -180) * v for v in values)))
+
     def _agent_action_to_env(self, agent_action):
-        """
-            TODO: Implement it
-            ----------------------------------------------
-            [0.01, 0.99, ........ 0.44, 0.55, 0.67]
-
-            {
-                "camera": (-179, 179),
-                "foward": 0,
-                "back": 1,
-                "left": 1
-            }
-
-            ----------------------------------------------
-            [
-                0.32, #corresponds to attack
-                0.99,
-                0.51,
-                ...
-            ]
-
-            :returns:
-            {
-                attack: 0 #<0.5 = 0
-                left: 1 #>0.5 = 1
-                right: 1 #>0.5 = 1
-            }
-        """
-        pass
+        return ({"camera": self._process_camera(agent_action[:2])} |
+                dict(
+                    zip(agent_action.keys(), list((map(lambda x: 0 if x < 0.5 else 1, agent_action[2:]))))
+                ))
