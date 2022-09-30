@@ -28,7 +28,19 @@ def cross_over(agent_list):
             TBD
         return: returns a new Agent derived from each agent from agent_list
     """
-    return agent_list
+    
+    if agent_list[0].fitness > agent_list[1].fitness:
+        child_genome = _cross_over_genome(agent_list[0].genotype, agent_list[1].genotype)
+        
+    elif agent_list[1].fitness > agent_list[0].fitness:
+        child_genome = _cross_over_genome(agent_list[1].genotype, agent_list[0].genotype)
+        
+    else:
+        child_genome = __cross_over_genome_same_fitness(agent_list[0].genotype, agent_list[1].genotype)
+        
+    child = Agent(child_genome)
+    
+    return child
 
 
 def _cross_over_genome(genotype_1, genotype_2):
