@@ -16,7 +16,8 @@ def selection(population, *, selection_size=2):
             TBD
         return: returns a List of selected Agents
     """
-    return list()
+    parent_list = random.sample(population, selection_size)
+    return parent_list
 
 
 def cross_over(agent_list):
