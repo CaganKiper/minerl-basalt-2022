@@ -8,7 +8,8 @@ class Genome:
         self.nodes = []
         self.connections = []
 
-        # ========== NODES LİST ========== #
+        self.largest_node_id = 1
+        # ========== NODES LIST ========== #
         for _ in range(sensor_size):  # Sensor nodes
             self.nodes.append(self.get_new_node(node_type = 0))
 
@@ -21,7 +22,6 @@ class Genome:
         # ======= CONNECTIONS LIST ======= #
 
         # ================================ #
-        self.largest_node_id = 1
 
     def __iter__(self):
         for connection in self.connections:
@@ -56,5 +56,13 @@ class Genome:
         self.largest_node_id += 1
         return Node(self.largest_node_id, node_type)
 
-    def test(self):
-        nonlocal innovation_table
+    def draw_network(self):
+        layer_dict = {}
+        for node in self.nodes:
+            layer = node.layer
+            if layer in layer_dict.keys():
+                layer_dict[layer] += 1
+            else:
+                layer_dict[layer] = 1
+
+        return layer_dict

@@ -91,39 +91,6 @@ def mutation(agent, *, mutation_rate=0.02):
 
 
 if __name__ == "__main__":
-    n1 = Node("1", "Input")
-    n2 = Node("2", "Input")
-    n3 = Node("3", "Input")
-    n4 = Node("4", "Output")
-
-    n5 = Node("5")
-    n6 = Node("6")
-
-    g1_connection_genes = [
-        Connection(n1, n4, innovation_number = 1),
-        Connection(n2, n4, enable = False, innovation_number = 2),
-        Connection(n3, n4, innovation_number = 3),
-        Connection(n2, n5, innovation_number = 4),
-        Connection(n5, n4, innovation_number = 5),
-        Connection(n1, n5, innovation_number = 8),
-    ]
-
-    g2_connection_genes = [
-        Connection(n1, n4, innovation_number = 1),
-        Connection(n2, n4, enable = False, innovation_number = 2),
-        Connection(n3, n4, innovation_number = 3),
-        Connection(n2, n5, innovation_number = 4),
-        Connection(n5, n4, enable = False, innovation_number = 5),
-        Connection(n5, n6, innovation_number = 6),
-        Connection(n6, n4, innovation_number = 7),
-        Connection(n3, n5, innovation_number = 9),
-        Connection(n1, n6, innovation_number = 10)
-    ]
-
-    g1 = Genome(g1_connection_genes)
-    g2 = Genome(g2_connection_genes)
-
-    g3 = _cross_over_genome(g1, g2)
-
-    print(g3)
+    g1 = Genome(2, 1)
+    print(g1.draw_network())
 
