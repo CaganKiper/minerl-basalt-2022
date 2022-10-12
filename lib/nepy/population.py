@@ -7,9 +7,11 @@ class Population:
     def __init__(self, agent_class, population_size):
         self.agent_class = agent_class
         self.population_size = population_size
-        self.generation = 1
+        self.generation = 0
 
         self._agent_list = [agent_class() for i in range(self.population_size)]
+
+        self.innovation_table = []
 
     def __iter__(self):
         for agent in self._agent_list:

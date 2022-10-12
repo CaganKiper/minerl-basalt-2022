@@ -1,6 +1,6 @@
 import random
 
-from lib.nepy.genotype import Genotype
+from lib.nepy.genome import Genome
 from lib.nepy.network.connection import Connection
 from lib.nepy.network.node import Node
 from lib.nepy.agent import Agent
@@ -54,7 +54,7 @@ def _cross_over_genome(genotype_1, genotype_2):
         else:
             temp.append(connection)
 
-    return Genotype(temp)
+    return Genome(temp)
 
 
 def __cross_over_genome_same_fitness(genotype_1, genotype_2):
@@ -75,7 +75,7 @@ def __cross_over_genome_same_fitness(genotype_1, genotype_2):
         if not (inv in temp.keys()):
             temp[inv] = connection
 
-    return Genotype(temp.values())
+    return Genome(temp.values())
 
 
 def mutation(agent, *, mutation_rate=0.02):
@@ -120,8 +120,8 @@ if __name__ == "__main__":
         Connection(n1, n6, innovation_number = 10)
     ]
 
-    g1 = Genotype(g1_connection_genes)
-    g2 = Genotype(g2_connection_genes)
+    g1 = Genome(g1_connection_genes)
+    g2 = Genome(g2_connection_genes)
 
     g3 = _cross_over_genome(g1, g2)
 

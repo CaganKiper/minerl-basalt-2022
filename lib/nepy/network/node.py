@@ -1,7 +1,11 @@
 class Node:
-    def __init__(self, node_name=None, node_type="Hidden"):
-        self.node_name = node_name
-        self.type = node_type
+    def __init__(self, name, type_):
+        self.name = name
+        self.type_ = type_  # FIXME: Rename element  # type 0=Sensor, 1=Actuator, 2=Hidden, 3=Bias
+
+        self.layer = None
+        self.input = None
+        self.output = None
 
     def __str__(self):
-        return f"({self.node_name})"
+        return f"({self.name})"
