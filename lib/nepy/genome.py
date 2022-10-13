@@ -48,7 +48,10 @@ class Genome:
         pass
 
     def _load_inputs(self, inputs):
-        pass
+        nodes = self.nodes
+        for count, input in enumerate(inputs): 
+            nodes[count].input = input
+            
 
     def foward(self):
         pass
