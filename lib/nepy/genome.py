@@ -1,6 +1,7 @@
-from lib.nepy.network.node import Node
-from lib.nepy.network.connection import Connection
+from network.node import Node
+from network.connection import Connection
 
+import graphviz
 
 class Genome:
 
@@ -8,7 +9,7 @@ class Genome:
         self.nodes = []
         self.connections = []
 
-        self.largest_node_id = 1
+        self.largest_node_id = 0
         # ========== NODES LIST ========== #
         for _ in range(sensor_size):  # Sensor nodes
             self.nodes.append(self.get_new_node(node_type = 0))
@@ -57,12 +58,41 @@ class Genome:
         return Node(self.largest_node_id, node_type)
 
     def draw_network(self):
-        layer_dict = {}
-        for node in self.nodes:
-            layer = node.layer
-            if layer in layer_dict.keys():
-                layer_dict[layer] += 1
-            else:
-                layer_dict[layer] = 1
+        nodes = self.nodes
+        node_names =[]
+        for node in nodes:
+            node_names.append(node.name)
+        connections = self.connections
+# =============================================================================
+#         layer_dict = {}
+#         for node in self.nodes:
+#             layer = node.layer
+#             if layer in layer_dict.keys():
+#                 layer_dict[layer] += 1
+#             else:
+#                 layer_dict[layer] = 1
+# =============================================================================
+        
+        node_attrs = {
+        'shape': 'circle',
+        'fontsize': '9',
+        'height': '0.2',
+        'width': '0.2'}
 
-        return layer_dict
+        dot = graphviz.Digraph(format='png', node_attr=node_attrs)
+        
+        for connect_gene in connections:
+            if connect_gene.enable == True:
+                input = str(connect_gene.in_node.name)
+                output = str(connect_gene.out_node.name)
+    
+                style = 'solid' if connect_gene.enable == True else 'dotted'
+                color = 'green' if float(connect_gene.weight) > 0 else 'red'
+                width = str(0.1 + abs(float(connect_gene.weight / 5.0)))
+                dot.edge(input, output, _attributes={'style': style, 'color': color, 'penwidth': width})
+
+        dot.render("trial_network", view=True)
+
+        return dot
+        
+        
