@@ -91,28 +91,31 @@ def mutation(agent, *, mutation_rate=0.02):
 
 
 if __name__ == "__main__":
-    g1 = Genome(7, 3)
+    g1 = Genome(2, 2)
     c1 = Connection(g1.nodes[0],g1.nodes[-1],innovation_number=1)
     c2 = Connection(g1.nodes[1],g1.nodes[-1],innovation_number=2)
     c3 = Connection(g1.nodes[2],g1.nodes[-1],innovation_number=3)
-    c4 = Connection(g1.nodes[3],g1.nodes[-2],innovation_number=4)
-    c5 = Connection(g1.nodes[4],g1.nodes[-3],innovation_number=5)
-    c6 = Connection(g1.nodes[5],g1.nodes[-3],innovation_number=6)
-    c7 = Connection(g1.nodes[6],g1.nodes[3],innovation_number=7)
-    c8 = Connection(g1.nodes[7],g1.nodes[-3],innovation_number=8)
-    c9 = Connection(g1.nodes[7],g1.nodes[-2],innovation_number=9)
-    c10 = Connection(g1.nodes[8],g1.nodes[-3],innovation_number=10)
+    c4 = Connection(g1.nodes[0],g1.nodes[-2],innovation_number=4)
+    c5 = Connection(g1.nodes[1],g1.nodes[-2],innovation_number=5)
+    c6 = Connection(g1.nodes[2],g1.nodes[-2],innovation_number=6)
+    
     g1.connections.append(c1)
     g1.connections.append(c2)
     g1.connections.append(c3)
     g1.connections.append(c4)
     g1.connections.append(c5)
     g1.connections.append(c6)
-    g1.connections.append(c7)
-    g1.connections.append(c8)
-    g1.connections.append(c9)
-    g1.connections.append(c10)
     
     
+    inputs =[1,2]
+    g1._load_inputs(inputs)
+    
+    g1.nodes[3].output = 0.9
+    g1.nodes[4].output = 0.1
+    print(g1._get_outputs())
     g1.draw_network()
-
+    
+    
+    
+    
+    
