@@ -6,6 +6,8 @@ from lib.nepy.network.connection import Connection
 class Genome:
 
     def __init__(self, sensor_size, actuator_size):
+        self.sensor_size = sensor_size
+        self.actuator_size = actuator_size
         self.nodes = []
         self.connections = []
 
@@ -52,7 +54,19 @@ class Genome:
         pass
 
     def _load_inputs(self, inputs):
-        pass
+        nodes = self.nodes
+        for count, input in enumerate(inputs):
+            nodes[count].input = input
+
+    def _get_outputs(self):
+        nodes = self.nodes
+        outputs = []
+        start = self.sensor_size + 1
+        end = start + self.actuator_size
+        for outnode in nodes[start:end]:
+            outputs.append(outnode.output)
+
+        return outputs
 
     def foward(self):
         pass
