@@ -91,7 +91,7 @@ def mutation(agent, *, mutation_rate=0.02):
 
 
 if __name__ == "__main__":
-    g1 = Genome(7, 3)
+    g1 = Genome(3, 3)
     for con in g1.connections:
         if random.random() < 0.1:
             con.enable = False
@@ -99,4 +99,6 @@ if __name__ == "__main__":
         con.weight = random.random()
 
     g1.draw_network().show()
+    prediction = g1.foward([0.8, 0.6, 0.2])
 
+    print(prediction)

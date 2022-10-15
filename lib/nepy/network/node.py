@@ -1,3 +1,6 @@
+import math
+
+
 class Node:
     def __init__(self, name, type_, layer=None):
         self.name = name
@@ -12,3 +15,16 @@ class Node:
 
     def __repr__(self):
         return f"({self.name})"
+
+    def activate(self):
+        if self.type_ == 0 or self.type_ == 3:
+            self.output = self.input
+        else:
+            self.output = self.activision_function(self.input)
+
+    def activision_function(self, x):
+        return sigmoid(x)
+
+
+def sigmoid(x):
+    return 1 / (1 + math.exp(-x))

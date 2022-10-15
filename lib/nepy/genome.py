@@ -3,6 +3,7 @@ from matplotlib import pyplot as plt
 from lib.nepy.network.node import Node
 from lib.nepy.network.connection import Connection
 
+
 class Genome:
 
     def __init__(self, sensor_size, actuator_size):
@@ -14,12 +15,12 @@ class Genome:
         self.largest_node_id = 0
         # ========== NODES LIST ========== #
         for _ in range(sensor_size):  # Sensor nodes
-            self.nodes.append(self.get_new_node(node_type = 0, layer=1))
+            self.nodes.append(self.get_new_node(node_type = 0, layer = 1))
 
-        self.nodes.append(self.get_new_node(node_type = 3, layer=1))  # Bias node in the input layer
+        self.nodes.append(self.get_new_node(node_type = 3, layer = 1))  # Bias node in the input layer
 
         for _ in range(actuator_size):  # Actuator nodes
-            self.nodes.append(self.get_new_node(node_type = 1, layer=3))
+            self.nodes.append(self.get_new_node(node_type = 1, layer = 2))
         # ================================ #
 
         # ======= CONNECTIONS LIST ======= #
@@ -53,27 +54,56 @@ class Genome:
     def mutate(self):
         pass
 
-    def _load_inputs(self, inputs):
-        nodes = self.nodes
-        for count, input in enumerate(inputs):
-            nodes[count].input = input
+    def _load_inputs(self, input_array):
+        for i, input in enumerate(input_array):
+            self.nodes[i].input = input
+            self.nodes[i].activate()
+
+        self.nodes[i + 1].input = 1.0
+        self.nodes[i + 1].activate()
 
     def _get_outputs(self):
-        nodes = self.nodes
         outputs = []
-        start = self.sensor_size + 1
-        end = start + self.actuator_size
-        for outnode in nodes[start:end]:
-            outputs.append(outnode.output)
+        for out_node in self.nodes[self.sensor_size + 1:self.sensor_size + self.actuator_size + 1]:
+            outputs.append(out_node.output)
 
         return outputs
 
-    def foward(self):
-        pass
+    def _get_nodes_in_layer(self, layer):
+        nodes_in_layer = []
+        for node in self.nodes:
+            if node.layer == layer:
+                nodes_in_layer.append(node)
+
+        return nodes_in_layer
+
+    def _get_connection_ends_with(self, node):
+        for connection in self.connections:
+            if connection.out_node == node:
+                yield connection
+
+    def foward(self, input_array):
+        self._load_inputs(input_array)
+        current_layer = 2
+
+        nodes_in_layer = self._get_nodes_in_layer(current_layer)
+        while nodes_in_layer:
+            for node in nodes_in_layer:
+                node_sum = 0
+                for connection in self._get_connection_ends_with(node):
+                    if connection.enable:
+                        node_sum += connection.in_node.output * connection.weight
+                node.input = node_sum
+                node.activate()
+
+            current_layer += 1
+            nodes_in_layer = self._get_nodes_in_layer(current_layer)
+
+        return self._get_outputs()
 
     def get_new_node(self, node_type, layer=None):
         self.largest_node_id += 1
-        return Node(self.largest_node_id, node_type, layer=layer)
+        return Node(self.largest_node_id, node_type, layer = layer)
 
     def draw_network(self):
         layer_dict = {}
@@ -106,6 +136,7 @@ class Genome:
             for node in nodes:
                 node_circle = plt.Circle(xy = (x, y), radius = 0.5)
                 ax.add_patch(node_circle)
+                ax.text(x, y, node.name, horizontalalignment = 'center', verticalalignment = 'center')
 
                 node_location_dict[node.name] = (x, y)
 
@@ -118,10 +149,10 @@ class Genome:
             out_pos = node_location_dict[connection.out_node.name]
 
             ax.plot([in_pos[0], out_pos[0]], [in_pos[1], out_pos[1]],
-                    color='g' if connection.enable else 'r',
-                    linestyle='solid' if connection.enable else 'dashed',
-                    alpha=connection.weight if not connection.enable else 1,
-                    linewidth=1 + connection.weight,
-                    zorder=0)
+                    color = 'g' if connection.enable else 'r',
+                    linestyle = 'solid',
+                    alpha = 1,
+                    linewidth = 2,
+                    zorder = 0)
 
         return fig
