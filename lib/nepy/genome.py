@@ -82,7 +82,7 @@ class Genome:
             if connection.out_node == node:
                 yield connection
 
-    def foward(self, input_array):
+    def forward(self, input_array):
         self._load_inputs(input_array)
         current_layer = 2
 

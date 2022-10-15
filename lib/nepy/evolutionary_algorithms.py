@@ -99,6 +99,6 @@ if __name__ == "__main__":
         con.weight = random.random()
 
     g1.draw_network().show()
-    prediction = g1.foward([0.8, 0.6, 0.2])
+    prediction = g1.forward([0.8, 0.6, 0.2])
 
     print(prediction)
