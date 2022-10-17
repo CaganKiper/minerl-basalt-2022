@@ -7,6 +7,14 @@ class Agent(abc.ABC):
         self.genome = Genome(input_size, output_size)
         self.fitness = self.fitness()
 
+    @property
+    def species_id(self):
+        return self.genome.species_id
+
+    @species_id.setter
+    def species_id(self, value):
+        self.genome.species_id = value
+
     @abc.abstractmethod
     def fitness(self):
         pass

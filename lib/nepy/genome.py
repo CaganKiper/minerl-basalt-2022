@@ -12,6 +12,8 @@ class Genome:
         self.nodes = []
         self.connections = []
 
+        self.species_id = None
+
         self.largest_node_id = 0
         # ========== NODES LIST ========== #
         for _ in range(sensor_size):  # Sensor nodes
