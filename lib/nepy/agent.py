@@ -27,8 +27,24 @@ class Agent(abc.ABC):
         excess_genes = 0
         disjoint_genes = 0
         weight_diff = 0
-
+        
         # TODO: Beautify
+        
+        inv_list_a = []
+        inv_list_b = []
+        
+        for conn in self.genome.connections:
+            inv_list_a.append(conn.innovation_number)
+            
+        for conn in agent_to_compare.genome.connections:
+            inv_list_a.append(conn.innovation_number)
+        
+        #excess
+        if max(inv_list_a) < max(inv_list_b):
+            pass
+        else:
+            pass
+            
         n = 1
         if normalized:
             if len(self.genome.connections) >= len(agent_to_compare.genome.connections):
