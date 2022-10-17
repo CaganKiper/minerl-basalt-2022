@@ -3,10 +3,8 @@ from minerl_agent import DiamondAgent
 
 POPULATION_KWARGS = dict(
     population_size = 10,
-)
-
-AGENT_KWARGS = dict(
-
+    agent_input_size = 5,
+    agent_output_size = 4
 )
 
 if __name__ == "__main__":

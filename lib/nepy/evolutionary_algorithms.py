@@ -4,6 +4,7 @@ from lib.nepy.genome import Genome
 from lib.nepy.network.connection import Connection
 from lib.nepy.network.node import Node
 from lib.nepy.agent import Agent
+from lib.nepy.population import Population
 
 
 def selection(population, *, selection_size=2):
@@ -102,3 +103,5 @@ if __name__ == "__main__":
     prediction = g1.forward([0.8, 0.6, 0.2])
 
     print(prediction)
+
+

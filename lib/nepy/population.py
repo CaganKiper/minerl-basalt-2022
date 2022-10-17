@@ -1,15 +1,14 @@
 from lib.nepy.agent import Agent
-from lib.nepy.evolutionary_algorithms import selection, cross_over, mutation
 
 
 class Population:
 
-    def __init__(self, agent_class, population_size):
+    def __init__(self, agent_class, population_size, agent_input_size, agent_output_size):
         self.agent_class = agent_class
         self.population_size = population_size
         self.generation = 0
 
-        self._agent_list = [agent_class() for i in range(self.population_size)]
+        self._agent_list = [agent_class(agent_input_size, agent_output_size) for i in range(self.population_size)]
 
         self.innovation_table = []
 
@@ -26,7 +25,7 @@ class Population:
         return self
 
     def _get_new_agent(self):
-        return mutation(cross_over(selection(self)))
+        return self
 
     def _get_new_population(self):
         new_population = []
