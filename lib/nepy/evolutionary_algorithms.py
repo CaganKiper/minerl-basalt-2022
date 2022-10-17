@@ -91,17 +91,18 @@ def mutation(agent, *, mutation_rate=0.02):
     return agent
 
 
+from lib.nepy.agent import Agent
+from lib.nepy.population import Population
+
+class TestAgent(Agent):
+
+    def fitness(self):
+        return 1
+
+
 if __name__ == "__main__":
-    g1 = Genome(3, 3)
-    for con in g1.connections:
-        if random.random() < 0.1:
-            con.enable = False
 
-        con.weight = random.random()
-
-    g1.draw_network().show()
-    prediction = g1.forward([0.8, 0.6, 0.2])
-
-    print(prediction)
+    pop = Population(TestAgent, 3, 2, 2)
+    print(pop._agent_list[0].genome.connections)
 
 

@@ -6,7 +6,7 @@ from lib.nepy.network.connection import Connection
 
 class Genome:
 
-    def __init__(self, sensor_size, actuator_size):
+    def __init__(self, sensor_size, actuator_size, innovation_method):
         self.sensor_size = sensor_size
         self.actuator_size = actuator_size
         self.nodes = []
@@ -30,7 +30,7 @@ class Genome:
             if node_out.type_ == 1:
                 for node_in in self.nodes:
                     if node_in.type_ == 0 or node_in.type_ == 3:
-                        self.connections.append(Connection(node_in, node_out))
+                        self.connections.append(Connection(node_in, node_out, innovation_number = innovation_method(node_in.name, node_out.name)))
         # ================================ #
 
     def __iter__(self):
