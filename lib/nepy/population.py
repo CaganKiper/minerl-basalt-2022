@@ -1,4 +1,5 @@
 from lib.nepy.agent import Agent
+import random
 
 
 class Population:
@@ -34,3 +35,23 @@ class Population:
             new_population.append(self._get_new_agent())
 
         return new_population
+    
+    def _speciate(self, threshold = 4):
+        temp_agent_list = self.agentlist
+        species_id = 0
+        while temp_agent_list:
+            new_specie = random.choise(temp_agent_list)
+            
+            species_id += 1
+            new_specie.species_id = species_id
+            
+            temp_agent_list.remove(new_specie)
+            
+            for specie in temp_agent_list:
+                
+                if  _compatibility_difference(new_specie,specie) < threshold:
+                    specie.species_id = species_id
+                    temp_agent_list.remove(specie)
+                    
+                    
+        
