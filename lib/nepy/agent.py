@@ -37,13 +37,17 @@ class Agent(abc.ABC):
             inv_list_a.append(conn.innovation_number)
             
         for conn in agent_to_compare.genome.connections:
-            inv_list_a.append(conn.innovation_number)
+            inv_list_b.append(conn.innovation_number)
         
         #excess
         if max(inv_list_a) < max(inv_list_b):
-            pass
-        else:
-            pass
+            for inv in inv_list_b:
+                if inv > inv_list_a:
+                    excess_genes += 1
+        elif max(inv_list_b) < max(inv_list_a):
+            for inv in inv_list_a:
+                if inv > inv_list_b:
+                    excess_genes += 1
             
         n = 1
         if normalized:
