@@ -48,7 +48,13 @@ class Agent(abc.ABC):
             for inv in inv_list_a:
                 if inv > inv_list_b:
                     excess_genes += 1
-            
+        
+        #disjoint
+        disjoint_a = len(inv_list_a)-len(list(set(inv_list_a).intersection(inv_list_b)))
+        disjoint_b = len(inv_list_b)-len(list(set(inv_list_a).intersection(inv_list_b)))
+        disjoint_genes = disjoint_a + disjoint_b
+        
+        
         n = 1
         if normalized:
             if len(self.genome.connections) >= len(agent_to_compare.genome.connections):
