@@ -50,10 +50,25 @@ class Agent(abc.ABC):
                     excess_genes += 1
         
         #disjoint
-        disjoint_a = len(inv_list_a)-len(list(set(inv_list_a).intersection(inv_list_b)))
-        disjoint_b = len(inv_list_b)-len(list(set(inv_list_a).intersection(inv_list_b)))
+        common_inv_list = list(set(inv_list_a).intersection(inv_list_b))
+        
+        disjoint_a = len(inv_list_a)-len(common_inv_list)
+        disjoint_b = len(inv_list_b)-len(common_inv_list)
         disjoint_genes = disjoint_a + disjoint_b
         
+        #weight difference
+        total_diff = 0
+        for inv in common_inv_list:
+            for conn in self.genome.connections:
+                if conn.innovation_number == inv:
+                    weight1 = conn.weight
+            
+            for conn in agent_to_compare.genome.connections:
+                if conn.innovation_number == inv:
+                    weight2 = conn.weight
+            
+            total_diff += abs(weight1-weight2)
+        weight_diff = (total_diff/len(common_inv_list))
         
         n = 1
         if normalized:
