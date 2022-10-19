@@ -106,6 +106,14 @@ class Genome:
     def get_new_node(self, node_type, layer=None):
         self.largest_node_id += 1
         return Node(self.largest_node_id, node_type, layer = layer)
+    
+    def get_conn_by_inv_num(self, innovation_number):
+        connection_list = self.connections
+        for conn in connection_list:
+            if conn.innovation_number == innovation_number:
+                connection = conn
+                break
+        return connection
 
     def draw_network(self):
         layer_dict = {}
