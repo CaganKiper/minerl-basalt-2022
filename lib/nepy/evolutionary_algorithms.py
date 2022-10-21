@@ -1,10 +1,10 @@
 import random
 
-from lib.nepy.genome import Genome
-from lib.nepy.network.connection import Connection
-from lib.nepy.network.node import Node
-from lib.nepy.agent import Agent
-from lib.nepy.population import Population
+from genome import Genome
+from network.connection import Connection
+from network.node import Node
+from agent import Agent
+from population import Population
 
 
 def selection(population, *, selection_size=2):
@@ -91,8 +91,6 @@ def mutation(agent, *, mutation_rate=0.02):
     return agent
 
 
-from lib.nepy.agent import Agent
-from lib.nepy.population import Population
 
 class TestAgent(Agent):
 
@@ -102,7 +100,17 @@ class TestAgent(Agent):
 
 if __name__ == "__main__":
 
-    pop = Population(TestAgent, 3, 2, 2)
-    print(pop._agent_list[0].genome.connections)
+    pop = Population(TestAgent, 10, 2, 2)
+    # for conn in pop._agent_list[0].genome.connections:
+    #     conn.weight = random.uniform(0,20)
+    # for conn in pop._agent_list[1].genome.connections:
+    #     conn.weight = random.uniform(0,20)
+    # for conn in pop._agent_list[2].genome.connections:
+    #     conn.weight = random.uniform(0,20)
+        
+    pop._speciate(threshold= 100000)
+
+    for agent in pop:
+        print(agent.species_id)
 
 

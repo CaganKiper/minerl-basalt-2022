@@ -1,6 +1,6 @@
 import numpy as np
 
-from lib.nepy.agent import Agent
+from agent import Agent
 import random
 
 
@@ -50,12 +50,12 @@ class Population:
             new_population.append(self._get_new_agent())
 
         return new_population
-
+#speciation
     def _speciate(self, threshold=4):
-        temp_agent_list = self.agentlist
+        temp_agent_list = self._agent_list.copy()
         species_id = 0
         while temp_agent_list:
-            champion = random.choise(temp_agent_list)
+            champion = random.choice(temp_agent_list)
 
             species_id += 1
             champion.species_id = species_id
@@ -63,7 +63,6 @@ class Population:
             temp_agent_list.remove(champion)
 
             for agent in temp_agent_list:
-
                 if agent.comparison_check(champion) < threshold:
                     agent.species_id = species_id
                     temp_agent_list.remove(agent)

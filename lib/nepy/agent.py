@@ -1,5 +1,5 @@
 import abc
-from lib.nepy.genome import Genome
+from genome import Genome
 
 
 class Agent(abc.ABC):
@@ -76,9 +76,9 @@ class Agent(abc.ABC):
             else:
                 n = len(agent_to_compare.genome.connections)
 
-        for connection in self.genome.connections:
-            if connection.enable:
-                print("a")
+        # for connection in self.genome.connections:
+        #     if connection.enable:
+        #         print("a")
 
         compatibility_difference = abs((c1 * (excess_genes / n))
                                        + (c2 * (disjoint_genes / n))

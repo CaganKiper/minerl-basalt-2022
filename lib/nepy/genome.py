@@ -1,8 +1,8 @@
 from matplotlib import pyplot as plt
 
-from lib.nepy.network.node import Node
-from lib.nepy.network.connection import Connection
-
+from network.node import Node
+from network.connection import Connection
+import random
 
 class Genome:
 
