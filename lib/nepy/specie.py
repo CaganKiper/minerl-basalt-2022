@@ -14,3 +14,4 @@ class Specie:
         self.average_fitness = 0
         self.average_adjusted_fitness = 0
         self.total_fitness = 0
+        self.generations_since_improved = 0
