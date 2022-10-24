@@ -64,7 +64,10 @@ class Population:
 
             temp_agent_list.remove(champion)
 
+            same_specie_list = []
             for agent in temp_agent_list:
                 if agent.comparison_check(champion) < threshold:
                     agent.species_id = species_id
-                    temp_agent_list.remove(agent)
+                    same_specie_list.append(agent)
+
+            temp_agent_list = [agent for agent in temp_agent_list if agent not in same_specie_list]
