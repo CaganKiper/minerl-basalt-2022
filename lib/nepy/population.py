@@ -14,7 +14,8 @@ class Population:
         self.innovation_table = np.zeros((agent_input_size, agent_input_size))
         self.max_inv_num = 1
 
-        self._agent_list = [agent_class(agent_input_size, agent_output_size, self.get_innovation_number) for i in range(self.population_size)]
+        self._agent_list = [agent_class(agent_input_size, agent_output_size, self.get_innovation_number) for i in
+                            range(self.population_size)]
 
     def __iter__(self):
         for agent in self._agent_list:
@@ -50,7 +51,8 @@ class Population:
             new_population.append(self._get_new_agent())
 
         return new_population
-#speciation
+
+    # speciation
     def _speciate(self, threshold=4):
         temp_agent_list = self._agent_list.copy()
         species_id = 0
