@@ -6,7 +6,7 @@ class Agent(abc.ABC):
     def __init__(self, input_size, output_size, innovation_method):
         self.genome = Genome(input_size, output_size, innovation_method)
         self.fitness = self.fitness()
-
+        self.adjusted_fitness = 0
     @property
     def species_id(self):
         return self.genome.species_id
