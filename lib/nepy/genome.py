@@ -4,6 +4,7 @@ from network.node import Node
 from network.connection import Connection
 import random
 
+
 class Genome:
 
     def __init__(self, sensor_size, actuator_size, innovation_method):
@@ -12,8 +13,7 @@ class Genome:
         self.nodes = []
         self.connections = []
 
-        self.species_id = None
-
+        # TODO: Implement hidden layer init
         self.largest_node_id = 0
         # ========== NODES LIST ========== #
         for _ in range(sensor_size):  # Sensor nodes
@@ -30,8 +30,12 @@ class Genome:
             if node_out.type_ == 1:
                 for node_in in self.nodes:
                     if node_in.type_ == 0 or node_in.type_ == 3:
-                        self.connections.append(Connection(node_in, node_out, innovation_number = innovation_method(node_in.name, node_out.name)))
+                        self.connections.append(Connection(node_in, node_out,
+                                                           innovation_number = innovation_method(node_in.name,
+                                                                                                 node_out.name)))
         # ================================ #
+
+        self.species_id = None
 
     def __iter__(self):
         for connection in self.connections:
@@ -106,14 +110,11 @@ class Genome:
     def get_new_node(self, node_type, layer=None):
         self.largest_node_id += 1
         return Node(self.largest_node_id, node_type, layer = layer)
-    
-    def get_conn_by_inv_num(self, innovation_number):
-        connection_list = self.connections
-        for conn in connection_list:
-            if conn.innovation_number == innovation_number:
-                connection = conn
-                break
-        return connection
+
+    def find_connection(self, innovation_number):
+        for connection in self.connections:
+            if connection.innovation_number == innovation_number:
+                return connection
 
     def draw_network(self):
         layer_dict = {}

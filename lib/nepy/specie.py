@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Oct 24 14:08:19 2022
-
-@author: hp
-"""
-
-
 class Specie:
     def __init__(self, species_id, member_count, allowed_offspring_count):
         self.species_id = species_id

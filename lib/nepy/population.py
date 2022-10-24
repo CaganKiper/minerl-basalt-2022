@@ -11,7 +11,7 @@ class Population:
         self.population_size = population_size
         self.generation = 0
 
-        self.innovation_table = np.zeros((agent_input_size, agent_input_size))
+        self.innovation_table = np.zeros((agent_input_size, agent_input_size), dtype=int)
         self.max_inv_num = 1
 
         self._agent_list = [agent_class(agent_input_size, agent_output_size, self.get_innovation_number) for i in

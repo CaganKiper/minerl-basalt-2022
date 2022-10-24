@@ -27,19 +27,19 @@ class Agent(abc.ABC):
         excess_genes = 0
         disjoint_genes = 0
         weight_diff = 0
-        
+
         # TODO: Beautify
-        
+
         inv_list_a = []
         inv_list_b = []
-        
+
         for conn in self.genome.connections:
             inv_list_a.append(conn.innovation_number)
-            
+
         for conn in agent_to_compare.genome.connections:
             inv_list_b.append(conn.innovation_number)
-        
-        #excess
+
+        # excess
         if max(inv_list_a) < max(inv_list_b):
             for inv in inv_list_b:
                 if inv > inv_list_a:
@@ -48,37 +48,33 @@ class Agent(abc.ABC):
             for inv in inv_list_a:
                 if inv > inv_list_b:
                     excess_genes += 1
-        
-        #disjoint
+
+        # disjoint
         common_inv_list = list(set(inv_list_a).intersection(inv_list_b))
-        
-        disjoint_a = len(inv_list_a)-len(common_inv_list)
-        disjoint_b = len(inv_list_b)-len(common_inv_list)
+
+        disjoint_a = len(inv_list_a) - len(common_inv_list)
+        disjoint_b = len(inv_list_b) - len(common_inv_list)
         disjoint_genes = (disjoint_a + disjoint_b - excess_genes)
-        
-        #weight difference
+
+        # weight difference
         total_diff = 0
         for inv in common_inv_list:
-            conn1 = self.genome.get_conn_by_inv_num(inv)
-            conn2 = agent_to_compare.genome.get_conn_by_inv_num(inv)
-            
+            conn1 = self.genome.find_connection(inv)
+            conn2 = agent_to_compare.genome.find_connection(inv)
+
             weight1 = conn1.weight
             weight2 = conn2.weight
-            
-            total_diff += abs(weight1-weight2)
-            
-        weight_diff = (total_diff/len(common_inv_list))
-        
+
+            total_diff += abs(weight1 - weight2)
+
+        weight_diff = (total_diff / len(common_inv_list))
+
         n = 1
         if normalized:
             if len(self.genome.connections) >= len(agent_to_compare.genome.connections):
                 n = len(self.genome.connections)
             else:
                 n = len(agent_to_compare.genome.connections)
-
-        # for connection in self.genome.connections:
-        #     if connection.enable:
-        #         print("a")
 
         compatibility_difference = abs((c1 * (excess_genes / n))
                                        + (c2 * (disjoint_genes / n))
