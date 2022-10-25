@@ -1,5 +1,5 @@
 import numpy as np
-
+from numpy.random import choice
 from agent import Agent
 import random
 
@@ -60,7 +60,8 @@ class Population:
     #TODO: Beautify
     
     # speciation
-    def _speciate(self, threshold=4):
+    # FIXME: Make threshold a class attribute
+    def _speciate(self, *, threshold=4):
         temp_agent_list = self._agent_list.copy()
         species_id = 0
         while temp_agent_list:
@@ -103,3 +104,25 @@ class Population:
         for specie in self.species_dict:
             specie['offspring count'] = ((specie['average adjusted fitness']/global_average_adjusted_fitness)*len(specie['member list']))
         
+    def _selection(self, survival_threshold = 80):
+        for specie in self.species_dict:
+            offspring = specie['offspring count']
+            
+            sorted_agents = sorted(specie['member list'], key=lambda x: x.fitness, reverse=True)
+            
+            survived_agents = sorted_agents[int(len(sorted_agents) * (survival_threshold/100)):]
+            
+            fitness_list = []
+            for agent in survived_agents:
+                fitness_list.append(agent.fitness)
+            
+            weights = [float(i)/sum(fitness_list) for i in fitness_list]   
+            for i in range(offspring):
+                parents = choice(
+                    survived_agents, 2, p=weights)
+                #crossover
+                self._cross_over(parents)
+            
+                    
+    
+            
