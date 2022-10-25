@@ -123,6 +123,43 @@ class Population:
                 #crossover
                 self._cross_over(parents)
             
-                    
+    def _cross_over(self, parent_list):
+        
+        if parent_list[0].fitness > parent_list[1].fitness:
+            offspring = parent_list[0]
+        elif parent_list[1].fitness > parent_list[0].fitness:
+            offspring = parent_list[0]
+        else:
+            index = random.randint(0, 1)
+            offspring = parent_list[index]
+        
+        inv_list_a = []
+        inv_list_b = []
+
+        for conn in parent_list[0].genome.connections:
+            inv_list_a.append(conn.innovation_number)
+
+        for conn in parent_list[1].genome.connections:
+            inv_list_b.append(conn.innovation_number)
+            
+            
+        common_inv_list = list(set(inv_list_a).intersection(inv_list_b))   
+        
+        for inv in common_inv_list:
+            conn1 = parent_list[0].genome.find_connection(inv)
+            conn2 = parent_list[1].genome.find_connection(inv)
+
+            weight1 = conn1.weight
+            weight2 = conn2.weight
+            
+            num = random.uniform(0, 1)
+            if num < 0.5:
+                selected_weight = weight1
+            else:
+                selected_weight = weight2
+            
+            
+            offspring_conn = offspring.genome.find_connection(inv)
+            offspring_conn.weight = selected_weight
     
             
