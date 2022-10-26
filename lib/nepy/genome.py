@@ -89,7 +89,6 @@ class Genome:
                 yield connection
 
     def forward(self, input_array):
-        print(input_array)
         self._load_inputs(input_array)
         current_layer = 2
 
@@ -105,7 +104,7 @@ class Genome:
 
             current_layer += 1
             nodes_in_layer = self._get_nodes_in_layer(current_layer)
-        print(self._get_outputs())
+        print(f"{input_array} ----> {self._get_outputs()}")
         return self._get_outputs()
 
     def get_new_node(self, node_type, layer=None):

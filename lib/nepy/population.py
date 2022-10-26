@@ -19,7 +19,7 @@ class Population:
         
         self.species_dict = {1:{'id':1, 'member list':[], 'offspring count':0, 
                               'total fitness':0, 'average fitness':0, 
-                              'average adjusted fitness:':0,
+                              'average adjusted fitness':0,
                               'generation since last improved:':0}}
 
     def __iter__(self):
@@ -30,9 +30,7 @@ class Population:
     def fit(self):
         new_population = self._get_next_population()
         self._agent_list = new_population
-
         self.generation += 1
-
         return self
 
     def get_innovation_number(self, in_name, out_name):
@@ -93,21 +91,24 @@ class Population:
             self.species_dict[species_id]['average adjusted fitness'] = total_adjusted_fitness / member_count
             
             temp_agent_list = [agent for agent in temp_agent_list if agent not in same_specie_list]
-
-        global_total_adjusted_fitness = 0
-        for specie in self.species_dict:
-            global_total_adjusted_fitness += specie['average adjusted fitness']
-        global_average_adjusted_fitness = (global_total_adjusted_fitness / len(self.species_dict))
-        for specie in self.species_dict:
-            specie['offspring count'] = ((specie['average adjusted fitness']/global_average_adjusted_fitness)*len(specie['member list']))
         
+        global_total_adjusted_fitness = 0
+        
+        for specie in self.species_dict:
+            global_total_adjusted_fitness += self.species_dict[specie]['average adjusted fitness']
+        global_average_adjusted_fitness = (global_total_adjusted_fitness / len(self.species_dict))
+        
+        for specie in self.species_dict:
+            self.species_dict[specie]['offspring count'] = ((self.species_dict[specie]['average adjusted fitness']/global_average_adjusted_fitness)*len(self.species_dict[specie]['member list']))
+        print(self.species_dict)
+    
     def _selection(self, survival_threshold = 80):
         new_agents_list = []
         for specie in self.species_dict:
             offspring_list = []
-            offspring_num = specie['offspring count']
+            offspring_num = self.species_dict[specie]['offspring count']
             
-            sorted_agents = sorted(specie['member list'], key=lambda x: x.fitness, reverse=True)
+            sorted_agents = sorted(self.species_dict[specie]['member list'], key=lambda x: x.fitness, reverse=True)
             
             survived_agents = sorted_agents[int(len(sorted_agents) * (survival_threshold/100)):]
             
