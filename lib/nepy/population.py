@@ -64,7 +64,7 @@ class Population:
             
             species_id += 1
             champion.species_id = species_id
-            
+            self.species_dict[species_id]['member list'].clear()
             self.species_dict[species_id]['id'] = species_id
             self.species_dict[species_id]['member list'].append(champion)
             self.species_dict[species_id]['total fitness'] += champion.fitness
@@ -103,6 +103,7 @@ class Population:
         print(self.species_dict)
     
     def _selection(self, survival_threshold = 80):
+        self._speciate()
         new_agents_list = []
         for specie in self.species_dict:
             offspring_list = []
@@ -117,7 +118,7 @@ class Population:
                 fitness_list.append(agent.fitness)
             
             weights = [float(i)/sum(fitness_list) for i in fitness_list]   
-            for i in range(offspring_num):
+            for i in range(int(offspring_num)):
                 parents = choice(
                     survived_agents, 2, p=weights)
                 #crossover
