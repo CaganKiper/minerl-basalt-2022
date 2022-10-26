@@ -89,6 +89,7 @@ class Genome:
                 yield connection
 
     def forward(self, input_array):
+        print(input_array)
         self._load_inputs(input_array)
         current_layer = 2
 
@@ -104,7 +105,7 @@ class Genome:
 
             current_layer += 1
             nodes_in_layer = self._get_nodes_in_layer(current_layer)
-
+        print(self._get_outputs())
         return self._get_outputs()
 
     def get_new_node(self, node_type, layer=None):
@@ -115,7 +116,13 @@ class Genome:
         for connection in self.connections:
             if connection.innovation_number == innovation_number:
                 return connection
-
+    
+    def get_innovation_list(self):
+        inv_list = []
+        for conn in self.connections:
+            inv_list.append(conn.innovation_number)
+        return inv_list
+    
     def draw_network(self):
         layer_dict = {}
         for node in self.nodes:

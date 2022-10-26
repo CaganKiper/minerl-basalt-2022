@@ -7,24 +7,27 @@ from population import Population
 class TestAgent(Agent):
 
     def fitness(self):
-        return 1
-
+        fitness = 0
+        if self.predict([0, 0])[0] <= 0.1:
+            fitness += 1
+        if self.predict([0, 1])[0] <= 0.1:
+            fitness += 1
+        if self.predict([1, 0])[0] <= 0.1:
+            fitness += 1
+        if self.predict([1, 1])[0] >= 0.9:
+            fitness += 1
+        return fitness
 
 if __name__ == "__main__":
 
-    pop = Population(TestAgent, 10, 2, 2)
-
-    pop._agent_list[0].genome.connections.pop(0)
-    pop._agent_list[0].genome.connections.pop(1)
-
+    pop = Population(TestAgent, 50, 2, 1)
+    
+    
     for a in pop:
-        for connection in a.genome.connections:
-            connection.weight = random.uniform(0, 1)
+        print(a.fitness)
 
-        print(a.genome)
-
-
-    pop._speciate(threshold = 0.20)
-
-    for agent in pop:
-        print(agent.species_id)
+    
+    for i in range(10):
+        pop.fit()
+    
+    pop._agent_list[0]

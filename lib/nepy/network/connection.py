@@ -8,7 +8,7 @@ class Connection:
         self.in_node = in_node
         self.out_node = out_node
 
-        self.weight = weight
+        self.weight = random.uniform(0,1)
 
         self.enable = enable
 

@@ -26,8 +26,9 @@ class Population:
         for agent in self._agent_list:
             yield agent
 
+
     def fit(self):
-        new_population = self._get_new_population()
+        new_population = self._get_next_population()
         self._agent_list = new_population
 
         self.generation += 1
@@ -45,17 +46,13 @@ class Population:
         else:
             self.innovation_table = np.pad(self.innovation_table, ((0, 1), (0, 1)), "constant", constant_values = 0)
             return self.get_innovation_number(in_name, out_name)
+    
 
-    def _get_new_agent(self):
-        return self
 
-    def _get_new_population(self):
-        new_population = []
-
-        while len(new_population) < self.population_size:
-            new_population.append(self._get_new_agent())
-
-        return new_population
+    def _get_next_population(self):
+        agent_list = self._selection()
+        
+        return agent_list
     
     #TODO: Beautify
     
@@ -105,8 +102,10 @@ class Population:
             specie['offspring count'] = ((specie['average adjusted fitness']/global_average_adjusted_fitness)*len(specie['member list']))
         
     def _selection(self, survival_threshold = 80):
+        new_agents_list = []
         for specie in self.species_dict:
-            offspring = specie['offspring count']
+            offspring_list = []
+            offspring_num = specie['offspring count']
             
             sorted_agents = sorted(specie['member list'], key=lambda x: x.fitness, reverse=True)
             
@@ -117,30 +116,26 @@ class Population:
                 fitness_list.append(agent.fitness)
             
             weights = [float(i)/sum(fitness_list) for i in fitness_list]   
-            for i in range(offspring):
+            for i in range(offspring_num):
                 parents = choice(
                     survived_agents, 2, p=weights)
                 #crossover
-                self._cross_over(parents)
-            
+                offspring_list.append(self._cross_over(parents))
+            new_agents_list = new_agents_list + offspring_list
+        return new_agents_list 
     def _cross_over(self, parent_list):
         
         if parent_list[0].fitness > parent_list[1].fitness:
             offspring = parent_list[0]
         elif parent_list[1].fitness > parent_list[0].fitness:
-            offspring = parent_list[0]
+            offspring = parent_list[1]
         else:
-            index = random.randint(0, 1)
-            offspring = parent_list[index]
+            offspring = parent_list[0]
         
-        inv_list_a = []
-        inv_list_b = []
+        # offspring = parent_list[0] if parent_list[0].fitness > parent_list[1].fitness else parent_list[1] if parent_list[1].fitness > parent_list[0].fitness else parent_list[0] 
 
-        for conn in parent_list[0].genome.connections:
-            inv_list_a.append(conn.innovation_number)
-
-        for conn in parent_list[1].genome.connections:
-            inv_list_b.append(conn.innovation_number)
+        inv_list_a = parent_list[0].genome.get_innovation_list()
+        inv_list_b = parent_list[1].genome.get_innovation_list()
             
             
         common_inv_list = list(set(inv_list_a).intersection(inv_list_b))   
@@ -161,5 +156,6 @@ class Population:
             
             offspring_conn = offspring.genome.find_connection(inv)
             offspring_conn.weight = selected_weight
-    
+        
+        return offspring
             
