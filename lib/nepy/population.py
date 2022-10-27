@@ -145,7 +145,10 @@ class Population:
                 parents = choice(
                     survived_agents, 2, p = weights)
                 # crossover
-                offspring_list.append(self._cross_over(parents))
+                offspring = self._cross_over(parents)
+                #mutation
+                offspring.genome.mutate()
+                offspring_list.append(offspring)
             new_agents_list = new_agents_list + offspring_list
         return new_agents_list
 
@@ -157,9 +160,6 @@ class Population:
             offspring = parent_list[1]
         else:
             offspring = parent_list[0]
-
-        # offspring = parent_list[0] if parent_list[0].fitness > parent_list[1].fitness else parent_list[1] if
-        # parent_list[1].fitness > parent_list[0].fitness else parent_list[0]
 
         inv_list_a = parent_list[0].genome.get_innovation_list()
         inv_list_b = parent_list[1].genome.get_innovation_list()

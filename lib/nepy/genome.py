@@ -3,6 +3,7 @@ from matplotlib import pyplot as plt
 from network.connection import Connection
 from network.node import Node
 
+import random
 
 class Genome:
 
@@ -56,9 +57,20 @@ class Genome:
     def add_connection(self):
         pass
 
-    def mutate(self):
-        pass
-
+    def mutate(self, weight_mutation_rate = 1):
+        chance = random.uniform(0,1)
+        
+        #weight mutation
+        if weight_mutation_rate > chance:
+            connection = random.choice(self.connections)
+            mutation_type_chance = random.uniform(0,1)
+            if mutation_type_chance > 0.9:
+                # weight modification
+                modification_rate = random.uniform(0.8,1.2)
+                connection.weight = connection.weight * modification_rate
+            else:
+                #random weight assignment
+                connection.weight = random.uniform(0,1)
     def _load_inputs(self, input_array):
         for i, input in enumerate(input_array):
             self.nodes[i].input = input
@@ -119,7 +131,7 @@ class Genome:
         for conn in self.connections:
             inv_list.append(conn.innovation_number)
         return inv_list
-
+    
     def draw_network(self):
         layer_dict = {}
         for node in self.nodes:
