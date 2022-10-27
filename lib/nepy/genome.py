@@ -1,8 +1,7 @@
 from matplotlib import pyplot as plt
 
-from network.node import Node
 from network.connection import Connection
-import random
+from network.node import Node
 
 
 class Genome:
@@ -115,13 +114,13 @@ class Genome:
         for connection in self.connections:
             if connection.innovation_number == innovation_number:
                 return connection
-    
+
     def get_innovation_list(self):
         inv_list = []
         for conn in self.connections:
             inv_list.append(conn.innovation_number)
         return inv_list
-    
+
     def draw_network(self):
         layer_dict = {}
         for node in self.nodes:

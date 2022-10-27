@@ -1,5 +1,5 @@
 import abc
-import minerl
+
 import gym
 
 from lib.nepy.agent import Agent
@@ -65,4 +65,3 @@ class DiamondAgent(MineRLAgent):
             TODO: Implement it
         """
         pass
-
