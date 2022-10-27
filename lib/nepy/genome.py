@@ -103,7 +103,6 @@ class Genome:
 
             current_layer += 1
             nodes_in_layer = self._get_nodes_in_layer(current_layer)
-        print(f"{input_array} ----> {self._get_outputs()}")
         return self._get_outputs()
 
     def get_new_node(self, node_type, layer=None):

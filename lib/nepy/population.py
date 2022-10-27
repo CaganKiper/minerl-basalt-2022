@@ -3,6 +3,8 @@ import random
 import numpy as np
 from numpy.random import choice
 
+from agent import Agent
+
 
 class Population:
 
@@ -14,7 +16,7 @@ class Population:
         self.innovation_table = np.zeros((agent_input_size, agent_input_size), dtype = int)
         self.max_inv_num = 1
 
-        self._agent_list = [agent_class(agent_input_size, agent_output_size, self.get_innovation_number) for i in
+        self._agent_list = [agent_class(agent_input_size, agent_output_size, self.get_innovation_number) for _ in
                             range(self.population_size)]
 
         self.species_dict = {1: {'id': 1, 'member list': [], 'offspring count': 0,
@@ -22,15 +24,36 @@ class Population:
                                  'average adjusted fitness': 0.0,
                                  'generation since last improved': 0}}
 
-    def __iter__(self):
+    def __iter__(self) -> Agent:
         for agent in self._agent_list:
             yield agent
+
+    def __getitem__(self, item: int) -> Agent:
+        return self._agent_list[item]
+
+    def __len__(self):
+        return len(self._agent_list)
 
     def fit(self):
         new_population = self._get_next_population()
         self._agent_list = new_population
         self.generation += 1
         return self
+
+    @property
+    def best_agent(self):
+        best_agent = self[0]
+        for agent in self:
+            if agent.fitness > best_agent.fitness:
+                best_agent = agent
+        return best_agent
+
+    @property
+    def average_fitness(self):
+        total_fitness = 0
+        for agent in self:
+            total_fitness += agent.fitness
+        return total_fitness / len(self)
 
     def get_innovation_number(self, in_name, out_name):
         if self.innovation_table.shape[0] - 1 >= in_name and self.innovation_table.shape[1] - 1 >= out_name:
@@ -101,9 +124,8 @@ class Population:
             self.species_dict[specie]['offspring count'] = int(
                 (self.species_dict[specie]['average adjusted fitness'] / global_average_adjusted_fitness) * len(
                     self.species_dict[specie]['member list']))
-        print(self.species_dict)
 
-    def _selection(self, survival_threshold=80):
+    def _selection(self, survival_threshold=0.8):
         self._speciate()
         new_agents_list = []
         for specie in self.species_dict:
@@ -112,7 +134,7 @@ class Population:
 
             sorted_agents = sorted(self.species_dict[specie]['member list'], key = lambda x: x.fitness, reverse = True)
 
-            survived_agents = sorted_agents[int(len(sorted_agents) * (survival_threshold / 100)):]
+            survived_agents = sorted_agents[:int(len(sorted_agents) * survival_threshold)]
 
             fitness_list = []
             for agent in survived_agents:
