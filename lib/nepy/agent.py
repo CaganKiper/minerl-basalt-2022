@@ -30,14 +30,8 @@ class Agent(abc.ABC):
 
         # TODO: Beautify
 
-        inv_list_a = []
-        inv_list_b = []
-
-        for conn in self.genome.connections:
-            inv_list_a.append(conn.innovation_number)
-
-        for conn in agent_to_compare.genome.connections:
-            inv_list_b.append(conn.innovation_number)
+        inv_list_a = self.genome.get_innovation_list()
+        inv_list_b = agent_to_compare.genome.get_innovation_list()
 
         # excess
         if max(inv_list_a) < max(inv_list_b):

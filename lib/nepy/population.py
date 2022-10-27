@@ -20,7 +20,7 @@ class Population:
         self.species_dict = {1:{'id':1, 'member list':[], 'offspring count':0, 
                               'total fitness':0, 'average fitness':0, 
                               'average adjusted fitness':0,
-                              'generation since last improved:':0}}
+                              'generation since last improved':0}}
 
     def __iter__(self):
         for agent in self._agent_list:
@@ -65,6 +65,7 @@ class Population:
             species_id += 1
             champion.species_id = species_id
             self.species_dict[species_id]['member list'].clear()
+            self.species_dict[species_id]['total fitness'] = 0
             self.species_dict[species_id]['id'] = species_id
             self.species_dict[species_id]['member list'].append(champion)
             self.species_dict[species_id]['total fitness'] += champion.fitness
