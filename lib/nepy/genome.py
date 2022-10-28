@@ -60,7 +60,7 @@ class Genome:
                                                                 node_out.name))
         self.connections.append(new_connection)
 
-    def mutate(self, weight_mutation_rate = 1, connection_mutation_rate = 0.05, connection_attempt_count = 20, node_mutation_rate = ):
+    def mutate(self, weight_mutation_rate = 1, connection_mutation_rate = 0.05, connection_enable_rate = 0.25, connection_attempt_count = 20, node_mutation_rate = 0.05):
         chance = random.uniform(0,1)
         
         #weight mutation
@@ -83,10 +83,21 @@ class Genome:
                 node_list.remove(node_in)
                 node_out = random.choice(node_list)
                 
-                #condition on illegal and recurrent connections
+                #condition on illegal, disabled and recurrent connections
                 if not((node_out.layer == node_in.layer) or (node_in.layer > node_out.layer)):
-                    weight = random.uniform(0,1)
-                    add_connection(node_in,node_out,weight)
+                    connection = self._get_connection(node_in,node_out)
+                    
+                    if connection == None:
+                        weight = random.uniform(0,1)
+                        self.add_connection(node_in,node_out,weight)
+                    elif not(connection.enable):
+                        enable_chance = random.uniform(0, 1)
+                        if connection_enable_rate > enable_chance:
+                            connection.table = True
+                        
+                    
+                
+                
         #adding a node
         
         
@@ -119,6 +130,11 @@ class Genome:
             if connection.out_node == node:
                 yield connection
 
+    def _get_connection(self, in_node, out_node):
+        for connection in self.connections:
+            if (connection.in_node == in_node) and (connection.out_node == out_node):
+                return connection
+
     def forward(self, input_array):
         self._load_inputs(input_array)
         current_layer = 2
@@ -145,6 +161,7 @@ class Genome:
         for connection in self.connections:
             if connection.innovation_number == innovation_number:
                 return connection
+        return None
 
     def get_innovation_list(self):
         inv_list = []
