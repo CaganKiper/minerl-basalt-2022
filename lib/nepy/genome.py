@@ -12,6 +12,8 @@ class Genome:
         self.actuator_size = actuator_size
         self.nodes = []
         self.connections = []
+        
+        self.innovation_method = innovation_method
 
         # TODO: Implement hidden layer init
         self.largest_node_id = 0
@@ -54,9 +56,9 @@ class Genome:
     def add_node(self):
         pass
 
-    def add_connection(self, node_in, node_out):
-        new_connection = Connection(node_in, node_out,
-                            innovation_number = innovation_method(node_in.name,
+    def add_connection(self, node_in, node_out, weight):
+        new_connection = Connection(node_in, node_out, weight,
+                            innovation_number = self.innovation_method(node_in.name,
                                                                 node_out.name))
         self.connections.append(new_connection)
 
@@ -93,15 +95,26 @@ class Genome:
                     elif not(connection.enable):
                         enable_chance = random.uniform(0, 1)
                         if connection_enable_rate > enable_chance:
-                            connection.table = True
-                        
-                    
-                
-                
+                            connection.table = True          
         #adding a node
-        
-        
-        
+        node_chance = random.uniform(0,1)
+        if node_mutation_rate > node_chance:
+            conn_to_disable = random.choice(self.connections)
+            while conn_to_disable.is_recurrent:
+                conn_to_disable = random.choice(self.connections)
+            conn_to_disable.enable = False
+            
+            innode = conn_to_disable.in_node
+            outnode = conn_to_disable.out_node
+            
+            new_node = self.get_new_node(node_type = 2)
+            
+            #first connection
+            self.add_connection(innode, new_node, conn_to_disable.weight)
+            self.add_connection(new_node, outnode, weight = 1)
+            
+            # TODO: Implement node layer setting
+            
     def _load_inputs(self, input_array):
         for i, input in enumerate(input_array):
             self.nodes[i].input = input

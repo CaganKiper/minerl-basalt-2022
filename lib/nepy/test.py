@@ -25,3 +25,4 @@ if __name__ == "__main__":
         #print(pop.average_fitness)
         print()
         pop.fit()
+        pop.best_agent.draw().show()

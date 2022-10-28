@@ -77,3 +77,6 @@ class Agent(abc.ABC):
                                        + (c3 * weight_diff))
 
         return compatibility_difference
+    
+    def draw(self):
+        return self.genome.draw_network()
