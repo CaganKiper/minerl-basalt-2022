@@ -35,16 +35,14 @@ class Agent(abc.ABC):
         inv_list_a = self.genome.get_innovation_list()
         inv_list_b = agent_to_compare.genome.get_innovation_list()
 
-        # FIXME: list comparing with num
         # excess
         if max(inv_list_a) < max(inv_list_b):
             for inv in inv_list_b:
-                print(f"{inv} {inv_list_a}")
-                if inv > inv_list_a:
+                if inv > max(inv_list_a):
                     excess_genes += 1
         elif max(inv_list_b) < max(inv_list_a):
             for inv in inv_list_a:
-                if inv > inv_list_b:
+                if inv > max(inv_list_b):
                     excess_genes += 1
 
         # disjoint
