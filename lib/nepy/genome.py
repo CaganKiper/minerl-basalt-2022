@@ -54,10 +54,13 @@ class Genome:
     def add_node(self):
         pass
 
-    def add_connection(self):
-        pass
+    def add_connection(self, node_in, node_out):
+        new_connection = Connection(node_in, node_out,
+                            innovation_number = innovation_method(node_in.name,
+                                                                node_out.name))
+        self.connections.append(new_connection)
 
-    def mutate(self, weight_mutation_rate = 1):
+    def mutate(self, weight_mutation_rate = 1, connection_mutation_rate = 0.05, connection_attempt_count = 20, node_mutation_rate = ):
         chance = random.uniform(0,1)
         
         #weight mutation
@@ -71,6 +74,23 @@ class Genome:
             else:
                 #random weight assignment
                 connection.weight = random.uniform(0,1)
+        #adding a connection
+        add_conn_chance = random.uniform(0,1)
+        if connection_mutation_rate > add_conn_chance:
+            for _ in range(connection_attempt_count):
+                node_list = self.nodes.copy()
+                node_in = random.choice(node_list)
+                node_list.remove(node_in)
+                node_out = random.choice(node_list)
+                
+                #condition on illegal and recurrent connections
+                if not((node_out.layer == node_in.layer) or (node_in.layer > node_out.layer)):
+                    weight = random.uniform(0,1)
+                    add_connection(node_in,node_out,weight)
+        #adding a node
+        
+        
+        
     def _load_inputs(self, input_array):
         for i, input in enumerate(input_array):
             self.nodes[i].input = input
