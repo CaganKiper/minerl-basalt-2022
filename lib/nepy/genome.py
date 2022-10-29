@@ -1,7 +1,7 @@
 from matplotlib import pyplot as plt
 
-from .network.connection import Connection
-from .network.node import Node, NodeType
+from network.connection import Connection
+from network.node import Node, NodeType
 
 import random
 

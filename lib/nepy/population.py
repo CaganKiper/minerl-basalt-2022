@@ -3,7 +3,7 @@ import random
 import numpy as np
 from numpy.random import choice
 
-from .agent import Agent
+from agent import Agent
 
 
 class Population:

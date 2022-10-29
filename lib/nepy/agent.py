@@ -1,6 +1,6 @@
 import abc
 
-from .genome import Genome
+from genome import Genome
 
 
 class Agent(abc.ABC):
