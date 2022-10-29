@@ -1,11 +1,11 @@
 import abc
 
-from genome import Genome
+from .genome import Genome
 
 
 class Agent(abc.ABC):
-    def __init__(self, input_size, output_size, innovation_method):
-        self.genome = Genome(input_size, output_size, innovation_method)
+    def __init__(self, input_size, output_size, hidden_size, connection_percentage, innovation_method):
+        self.genome = Genome(input_size, output_size, hidden_size, connection_percentage, innovation_method)
         self.fitness = self.fitness()
         self.adjusted_fitness = 0
 

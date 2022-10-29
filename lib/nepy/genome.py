@@ -1,14 +1,14 @@
 from matplotlib import pyplot as plt
 
-from network.connection import Connection
-from network.node import Node
+from .network.connection import Connection
+from .network.node import Node, NodeType
 
 import random
 
 
 class Genome:
 
-    def __init__(self, sensor_size, actuator_size, innovation_method):
+    def __init__(self, sensor_size, actuator_size, hidden_size, connection_percentage, innovation_method):
         self.sensor_size = sensor_size
         self.actuator_size = actuator_size
         self.nodes = []
@@ -16,26 +16,45 @@ class Genome:
 
         self.innovation_method = innovation_method
 
-        # TODO: Implement hidden layer init
         self.largest_node_id = 0
         # ========== NODES LIST ========== #
-        for _ in range(sensor_size):  # Sensor nodes
-            self.nodes.append(self.get_new_node(node_type=0, layer=1))
+        for _ in range(sensor_size):    # Sensor nodes
+            self.nodes.append(self.get_new_node(node_type=NodeType.SENSOR, layer=1))
 
-        self.nodes.append(self.get_new_node(node_type=3, layer=1))  # Bias node in the input layer
+        self.nodes.append(self.get_new_node(node_type=NodeType.BIAS, layer=1))  # Bias node in the input layer
 
         for _ in range(actuator_size):  # Actuator nodes
-            self.nodes.append(self.get_new_node(node_type=1, layer=2))
+            self.nodes.append(self.get_new_node(node_type=NodeType.ACTUATOR, layer=3 if hidden_size else 2))
+
+        for _ in range(hidden_size):    # Hidden nodes
+            self.nodes.append(self.get_new_node(node_type=NodeType.HIDDEN, layer=2))
         # ================================ #
 
         # ======= CONNECTIONS LIST ======= #
-        for node_out in self.nodes:
-            if node_out.type_ == 1:
-                for node_in in self.nodes:
-                    if node_in.type_ == 0 or node_in.type_ == 3:
-                        self.connections.append(Connection(node_in, node_out,
-                                                           innovation_number=innovation_method(node_in.name,
-                                                                                               node_out.name)))
+        # IF HIDDEN LAYER EXISTS #
+        if hidden_size:
+            for node_out in self.nodes:
+                if node_out.node_type == NodeType.HIDDEN:
+                    for node_in in self.nodes:
+                        if node_in.node_type == NodeType.SENSOR or node_in.node_type == NodeType.BIAS:
+                            if connection_percentage > random.uniform(0, 1):
+                                self.connections.append(Connection(node_in, node_out, innovation_number=innovation_method(node_in.node_id, node_out.node_id)))
+
+            for node_out in self.nodes:
+                if node_out.node_type == NodeType.ACTUATOR:
+                    for node_in in self.nodes:
+                        if node_in.node_type == NodeType.HIDDEN:
+                            if connection_percentage > random.uniform(0, 1):
+                                self.connections.append(Connection(node_in, node_out, innovation_number=innovation_method(node_in.node_id, node_out.node_id)))
+
+        # IF HIDDEN LAYER DOES NOT EXIST
+        else:
+            for node_out in self.nodes:
+                if node_out.node_type == NodeType.ACTUATOR:
+                    for node_in in self.nodes:
+                        if node_in.node_type == NodeType.SENSOR or node_in.node_type == NodeType.BIAS:
+                            if connection_percentage > random.uniform(0, 1):
+                                self.connections.append(Connection(node_in, node_out, innovation_number=innovation_method(node_in.node_id, node_out.node_id)))
         # ================================ #
 
         self.species_id = None
@@ -59,8 +78,8 @@ class Genome:
 
     def add_connection(self, node_in, node_out, weight):
         new_connection = Connection(node_in, node_out, weight,
-                                    innovation_number=self.innovation_method(node_in.name,
-                                                                             node_out.name))
+                                    innovation_number=self.innovation_method(node_in.node_id,
+                                                                             node_out.node_id))
         self.connections.append(new_connection)
 
     def mutate(self, weight_mutation_rate=0.8, connection_mutation_rate=0.05, connection_enable_rate=0.25,
@@ -157,7 +176,7 @@ class Genome:
 
     def _get_depth(self, node):
         depth = 0
-        if node.type_ == 0 or node.type_ == 3:
+        if node.node_type == 0 or node.node_type == 3:
             return depth
         for connection in self._get_connections_ends_with(node):
             if self._get_depth(connection.in_node) > depth:
@@ -229,17 +248,17 @@ class Genome:
             for node in nodes:
                 node_circle = plt.Circle(xy=(x, y), radius=0.5)
                 ax.add_patch(node_circle)
-                ax.text(x, y, node.name, horizontalalignment='center', verticalalignment='center')
+                ax.text(x, y, node.node_id, horizontalalignment='center', verticalalignment='center')
 
-                node_location_dict[node.name] = (x, y)
+                node_location_dict[node.node_id] = (x, y)
 
                 y += y_gap
 
             x += x_gap
 
         for connection in self.connections:
-            in_pos = node_location_dict[connection.in_node.name]
-            out_pos = node_location_dict[connection.out_node.name]
+            in_pos = node_location_dict[connection.in_node.node_id]
+            out_pos = node_location_dict[connection.out_node.node_id]
 
             ax.plot([in_pos[0], out_pos[0]], [in_pos[1], out_pos[1]],
                     color='g' if connection.enable else 'r',

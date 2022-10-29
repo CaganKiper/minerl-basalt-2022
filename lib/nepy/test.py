@@ -17,7 +17,7 @@ class TestAgent(Agent):
 
 if __name__ == "__main__":
 
-    pop = Population(TestAgent, 200, 2, 1)
+    pop = Population(TestAgent, agent_input_size=2, agent_output_size=1, initial_hidden_size=1, population_size=100)
 
     for _ in range(25):
         print(f"gen:{pop.generation}")

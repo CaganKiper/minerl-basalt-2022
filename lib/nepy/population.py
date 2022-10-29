@@ -3,21 +3,23 @@ import random
 import numpy as np
 from numpy.random import choice
 
-from agent import Agent
+from .agent import Agent
 
 
 class Population:
 
-    def __init__(self, agent_class, population_size, agent_input_size, agent_output_size):
+    def __init__(self, agent_class, *, population_size=100, agent_input_size, agent_output_size, initial_hidden_size=0,
+                 initial_connection_percentage=1.0):
         self.agent_class = agent_class
         self.population_size = population_size
         self.generation = 0
 
-        self.innovation_table = np.zeros((agent_input_size, agent_input_size), dtype = int)
+        self.innovation_table = np.zeros((agent_input_size, agent_input_size), dtype=int)
         self.max_inv_num = 1
 
-        self._agent_list = [agent_class(agent_input_size, agent_output_size, self.get_innovation_number) for _ in
-                            range(self.population_size)]
+        self._agent_list = [
+            agent_class(agent_input_size, agent_output_size, initial_hidden_size, initial_connection_percentage,
+                        self.get_innovation_number) for _ in range(self.population_size)]
 
         self.species_dict = {1: {'id': 1, 'member list': [], 'offspring count': 0,
                                  'total fitness': 0.0, 'average fitness': 0.0,
@@ -64,7 +66,7 @@ class Population:
             return self.innovation_table[in_name, out_name]
 
         else:
-            self.innovation_table = np.pad(self.innovation_table, ((0, 1), (0, 1)), "constant", constant_values = 0)
+            self.innovation_table = np.pad(self.innovation_table, ((0, 1), (0, 1)), "constant", constant_values=0)
             return self.get_innovation_number(in_name, out_name)
 
     def _get_next_population(self):
@@ -132,7 +134,7 @@ class Population:
             offspring_list = []
             offspring_num = self.species_dict[specie]['offspring count']
 
-            sorted_agents = sorted(self.species_dict[specie]['member list'], key = lambda x: x.fitness, reverse = True)
+            sorted_agents = sorted(self.species_dict[specie]['member list'], key=lambda x: x.fitness, reverse=True)
 
             survived_agents = sorted_agents[:int(len(sorted_agents) * survival_threshold)]
 
@@ -143,10 +145,10 @@ class Population:
             weights = [float(i) / sum(fitness_list) for i in fitness_list]
             for i in range(int(offspring_num)):
                 parents = choice(
-                    survived_agents, 2, p = weights)
+                    survived_agents, 2, p=weights)
                 # crossover
                 offspring = self._cross_over(parents)
-                #mutation
+                # mutation
                 offspring.genome.mutate()
                 offspring_list.append(offspring)
             new_agents_list = new_agents_list + offspring_list
