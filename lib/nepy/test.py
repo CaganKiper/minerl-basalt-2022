@@ -17,12 +17,12 @@ class TestAgent(Agent):
 
 if __name__ == "__main__":
 
-    pop = Population(TestAgent, 10, 2, 1)
+    pop = Population(TestAgent, 200, 2, 1)
 
-    for _ in range(500):
+    for _ in range(25):
         print(f"gen:{pop.generation}")
         print(pop.best_agent.fitness)
-        #print(pop.average_fitness)
+        print(pop.average_fitness)
         print()
         pop.fit()
 

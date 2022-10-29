@@ -141,7 +141,7 @@ class Genome:
 
         return nodes_in_layer
 
-    def _get_connection_ends_with(self, node):
+    def _get_connections_ends_with(self, node):
         for connection in self.connections:
             if connection.out_node == node:
                 yield connection
@@ -159,7 +159,7 @@ class Genome:
         depth = 0
         if node.type_ == 0 or node.type_ == 3:
             return depth
-        for connection in self._get_connection_ends_with(node):
+        for connection in self._get_connections_ends_with(node):
             if self._get_depth(connection.in_node) > depth:
                 depth = self._get_depth(connection.in_node)
         return depth + 1
@@ -172,7 +172,7 @@ class Genome:
         while nodes_in_layer:
             for node in nodes_in_layer:
                 node_sum = 0
-                for connection in self._get_connection_ends_with(node):
+                for connection in self._get_connections_ends_with(node):
                     if connection.enable:
                         node_sum += connection.in_node.output * connection.weight
                 node.input = node_sum
